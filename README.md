@@ -1,36 +1,46 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# LeadsLookup
 
-## Getting Started
+A lead-discovery tool for freelancers: find real local businesses by category and location, then save and track them.
 
-First, run the development server:
+**Status:** early development (Phase 0, foundation). The product features are not built yet.
+
+## Stack
+
+Next.js (App Router), TypeScript, Tailwind CSS v4, shadcn/ui (Radix), pnpm, Vitest, Docker.
+
+## Requirements
+
+- Node.js 24
+- pnpm 12 (the version is pinned in `package.json`)
+- Docker Desktop (optional, for the container)
+
+## Getting started
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open on Local Machine : http://localhost:3000.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Command          | What it does                                         |
+| ---------------- | ---------------------------------------------------- |
+| `pnpm dev`       | Start the development server                         |
+| `pnpm build`     | Create a production build                            |
+| `pnpm lint`      | Run ESLint                                           |
+| `pnpm typecheck` | Generate route types and run the TypeScript compiler |
+| `pnpm test`      | Run the unit tests once                              |
 
-## Learn More
+## Docker
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+docker compose up --build
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+The app is served at http://localhost:3000 and is only reachable from your own machine.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Continuous integration
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+GitHub Actions runs lint, typecheck, tests and a production build on every push to `main` and on pull requests.
