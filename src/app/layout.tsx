@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Manrope, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { ThemeProvider } from "@/components/layout/theme-provider";
 
 const manrope = Manrope({
   variable: "--font-manrope",
@@ -30,7 +31,16 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${manrope.variable} ${geistMono.variable} h-full antialiased`}
       suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+        </ThemeProvider>
+      </body>
     </html>
   );
 }
