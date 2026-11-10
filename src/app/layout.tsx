@@ -3,6 +3,7 @@ import { Manrope, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/layout/theme-provider";
 import { CookieBanner } from "@/features/consent/cookie-banner";
+import { siteConfig } from "@/config/site";
 
 const manrope = Manrope({
   variable: "--font-manrope",
@@ -17,12 +18,17 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(siteConfig.url),
   title: {
-    default: "LeadsLookup",
+    default: "LeadsLookup: find and organize business leads",
     template: "%s | LeadsLookup",
   },
-  description:
-    "Discover businesses worldwide, find potential clients, and manage your leads with LeadsLookup.",
+  description: siteConfig.description,
+  applicationName: siteConfig.name,
+  alternates: { canonical: "./" },
+  robots: siteConfig.indexable ? undefined : { index: false, follow: false },
+  openGraph: { type: "website", siteName: siteConfig.name, locale: "en_US" },
+  twitter: { card: "summary_large_image" },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

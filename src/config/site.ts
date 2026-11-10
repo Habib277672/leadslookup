@@ -1,5 +1,11 @@
+const envUrl = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "");
+
 export const siteConfig = {
   name: "LeadsLookup",
+  description:
+    "Find businesses by category and location, save the promising ones, and keep your outreach organized.",
+  url: envUrl ?? "http://localhost:3000",
+  indexable: Boolean(envUrl),
 } as const;
 
 export const mainNav = [
