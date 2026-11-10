@@ -327,6 +327,7 @@
 
   html {
     @apply font-sans;
+    scroll-padding-top: 4.5rem;
   }
 
   body {
