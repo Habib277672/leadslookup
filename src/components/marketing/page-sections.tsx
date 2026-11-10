@@ -70,3 +70,16 @@ export function CtaSection({
     </section>
   );
 }
+
+export function DraftNotice({ children }: { children: ReactNode }) {
+  return (
+    <section className="border-b border-border bg-surface-muted">
+      <div className={`${container} py-4 text-sm text-text-secondary`}>
+        <p>
+          <span className="font-medium text-text-primary">Draft. </span>
+          {children}
+        </p>
+      </div>
+    </section>
+  );
+}
