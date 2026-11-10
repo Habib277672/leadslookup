@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { cacheLife } from "next/cache";
 import { footerNav, siteConfig } from "@/config/site";
+import { CookiePreferencesButton } from "@/features/consent/cookie-preferences-button";
 
 async function CopyrightYear() {
   "use cache";
@@ -44,10 +45,11 @@ export function SiteFooter() {
           ))}
         </nav>
       </div>
-      <div className="border-t border-border">
+      <div className="flex border-t border-border">
         <p className="mx-auto w-full max-w-6xl px-4 py-4 text-sm text-text-secondary sm:px-6">
           © <CopyrightYear /> {siteConfig.name}
         </p>
+        <CookiePreferencesButton className="inline-flex min-h-11 w-50 items-center text-sm text-text-secondary hover:text-text-primary" />
       </div>
     </footer>
   );
