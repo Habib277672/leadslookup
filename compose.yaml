@@ -4,3 +4,30 @@ services:
     image: leadslookup-web
     ports:
       - "127.0.0.1:3000:3000"
+
+  # Local development only. Credentials are not secrets; the port is bound to localhost.
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: leadslookup
+      POSTGRES_PASSWORD: leadslookup_dev
+      POSTGRES_DB: leadslookup
+    ports:
+      - "127.0.0.1:5433:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U leadslookup -d leadslookup"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  # Captures outgoing dev email. UI: http://localhost:8025, SMTP: localhost:1025
+  mailpit:
+    image: axllent/mailpit
+    ports:
+      - "127.0.0.1:1025:1025"
+      - "127.0.0.1:8025:8025"
+
+volumes:
+  db-data:
