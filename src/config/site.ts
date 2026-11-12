@@ -1,4 +1,5 @@
-const envUrl = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "");
+const envUrl =
+  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || undefined;
 
 export const siteConfig = {
   name: "LeadsLookup",
