@@ -86,6 +86,7 @@ describe("access tokens", () => {
     expect(await verifyAccessToken(token)).toEqual(claims);
     const [header, body] = token
       .split(".")
+      .slice(0, 2)
       .map((p) => JSON.parse(Buffer.from(p, "base64url").toString()));
     expect(header).toMatchObject({ alg: "RS256", kid });
     expect(body).toMatchObject({
