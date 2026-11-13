@@ -45,3 +45,25 @@ export function verificationEmail(args: {
     html,
   };
 }
+
+export function accountExistsEmail(args: { to: string }): EmailMessage {
+  const loginUrl = `${siteConfig.url}/login`;
+  const resetUrl = `${siteConfig.url}/forgot-password`;
+  const text = [
+    "Someone tried to create a LeadsLookup account with this email address, but you already have one.",
+    "",
+    `Log in: ${loginUrl}`,
+    `Forgot your password? ${resetUrl}`,
+    "",
+    "If this wasn't you, you can ignore this email. Your account has not been changed.",
+  ].join("\n");
+  const html = `<p>Someone tried to create a LeadsLookup account with this email address, but you already have one.</p>
+<p><a href="${escapeHtml(loginUrl)}">Log in</a> or <a href="${escapeHtml(resetUrl)}">reset your password</a>.</p>
+<p>If this wasn't you, you can ignore this email. Your account has not been changed.</p>`;
+  return {
+    to: args.to,
+    subject: "You already have a LeadsLookup account",
+    text,
+    html,
+  };
+}

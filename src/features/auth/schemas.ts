@@ -39,3 +39,7 @@ export const loginSchema = z
       .max(128, "Enter your password."),
   })
   .transform((v) => ({ ...v, emailNormalized: normalizeEmail(v.email) }));
+
+export const emailOnlySchema = z
+  .object({ email })
+  .transform((v) => ({ ...v, emailNormalized: normalizeEmail(v.email) }));
