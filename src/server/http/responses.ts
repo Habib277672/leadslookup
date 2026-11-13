@@ -2,6 +2,10 @@ import z from "zod";
 
 export type ErrorCode =
   | "invalid_input"
+  | "invalid_token"
+  | "invalid_credentials"
+  | "verification_required"
+  | "account_suspended"
   | "unauthenticated"
   | "forbidden"
   | "not_found"
