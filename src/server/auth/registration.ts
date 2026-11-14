@@ -1,6 +1,7 @@
 import "server-only";
 import type { Prisma } from "@/generated/prisma/client";
 import { getDb } from "@/server/db/client";
+import { isUniqueViolation } from "@/server/db/errors";
 import {
   getEmailService,
   type EmailService,
@@ -23,13 +24,13 @@ type Deps = { email?: EmailService };
 
 const TX = { timeout: 15_000, maxWait: 10_000 } as const;
 
-function isUniqueViolation(error: unknown): boolean {
-  return (
-    typeof error === "object" &&
-    error !== null &&
-    (error as { code?: unknown }).code === "P2002"
-  );
-}
+// function isUniqueViolation(error: unknown): boolean {
+//   return (
+//     typeof error === "object" &&
+//     error !== null &&
+//     (error as { code?: unknown }).code === "P2002"
+//   );
+// }
 
 /** Invalidates older unused tokens, then creates a fresh one. Returns the raw token. */
 async function issueVerificationToken(

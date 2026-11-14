@@ -12,6 +12,7 @@ import {
   TextField,
 } from "./ui";
 import { notify } from "@/lib/notify";
+import { GoogleButton, OrDivider } from "./google-button";
 
 export function RegisterForm() {
   const register = useSubmit("/api/v1/auth/register");
@@ -46,6 +47,8 @@ export function RegisterForm() {
   if (sentTo) {
     return (
       <div className="space-y-4">
+        <GoogleButton />
+        <OrDivider />
         <FormNotice>
           If <span className="font-medium">{sentTo}</span> can be registered,
           we&apos;ve sent a confirmation link. It works once and expires in 24

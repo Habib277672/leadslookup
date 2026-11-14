@@ -6,6 +6,9 @@ import { useRef, useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import { notify } from "@/lib/notify";
 import { useSubmit } from "./use-submit";
+import { Suspense } from "react";
+import { GoogleButton, OrDivider } from "./google-button";
+import { LoginNotice } from "./login-notice";
 import {
   FormAlert,
   FormNotice,
@@ -52,6 +55,11 @@ export function LoginForm() {
 
   return (
     <div className="space-y-6">
+      <Suspense fallback={null}>
+        <LoginNotice />
+      </Suspense>
+      <GoogleButton />
+      <OrDivider />
       <form ref={formRef} onSubmit={onSubmit} noValidate className="space-y-5">
         <FormAlert
           message={

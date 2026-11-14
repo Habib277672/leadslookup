@@ -20,3 +20,14 @@ export function safeEqualHex(a: string, b: string): boolean {
     timingSafeEqual(left, right)
   );
 }
+
+/** Constant-time comparison for ordinary strings (state, nonce). */
+export function safeEqualString(a: string, b: string): boolean {
+  const left = Buffer.from(a);
+  const right = Buffer.from(b);
+  return (
+    left.length > 0 &&
+    left.length === right.length &&
+    timingSafeEqual(left, right)
+  );
+}
