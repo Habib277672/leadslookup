@@ -12,6 +12,7 @@ import {
   SubmitButton,
   TextField,
 } from "./ui";
+import { notify } from "@/lib/notify";
 
 export function LoginForm() {
   const router = useRouter();
@@ -28,14 +29,20 @@ export function LoginForm() {
       email: String(data.get("email") ?? ""),
       password: String(data.get("password") ?? ""),
     });
-    if (result.ok) router.replace("/dashboard");
+    if (result.ok) {
+      notify.success("Logged in.");
+      router.replace("/dashboard");
+    }
   }
 
   async function onResend() {
     if (!formRef.current) return;
     const email = String(new FormData(formRef.current).get("email") ?? "");
     const result = await resend.submit({ email });
-    if (result.ok) setResent(true);
+    if (result.ok) {
+      notify.success("New link requested.");
+      setResent(true);
+    }
   }
 
   const needsVerification = login.error?.code === "verification_required";

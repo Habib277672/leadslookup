@@ -10,6 +10,7 @@ import {
   SubmitButton,
   TextField,
 } from "./ui";
+import { notify } from "@/lib/notify";
 
 export function ForgotPasswordForm() {
   const forgot = useSubmit<{ message: string }>("/api/v1/auth/password/forgot");
@@ -19,7 +20,10 @@ export function ForgotPasswordForm() {
     event.preventDefault();
     const email = String(new FormData(event.currentTarget).get("email") ?? "");
     const result = await forgot.submit({ email });
-    if (result.ok) setMessage(result.data.message);
+    if (result.ok) {
+      notify.success("Reset link requested.");
+      setMessage(result.data.message);
+    }
   }
 
   if (message) {

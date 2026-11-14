@@ -11,6 +11,7 @@ import {
   SubmitButton,
   TextField,
 } from "./ui";
+import { notify } from "@/lib/notify";
 
 function ResendForm() {
   const resend = useSubmit("/api/v1/auth/email/verification/resend");
@@ -20,7 +21,10 @@ function ResendForm() {
     event.preventDefault();
     const email = String(new FormData(event.currentTarget).get("email") ?? "");
     const result = await resend.submit({ email });
-    if (result.ok) setSent(true);
+    if (result.ok) {
+      notify.success("New link requested.");
+      setSent(true);
+    }
   }
 
   if (sent) {
@@ -64,7 +68,10 @@ export function VerifyEmailForm() {
     event.preventDefault();
     if (!token) return;
     const result = await confirm.submit({ token });
-    if (result.ok) router.replace("/dashboard");
+    if (result.ok) {
+      notify.success("Email confirmed. You're logged in.");
+      router.replace("/dashboard");
+    }
   }
 
   if (!token || confirm.error?.code === "invalid_token") {

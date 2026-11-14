@@ -3,6 +3,7 @@ import { Manrope, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/layout/theme-provider";
 import { CookieBanner } from "@/features/consent/cookie-banner";
+import { Toaster } from "@/components/layout/toaster";
 import { siteConfig } from "@/config/site";
 
 const manrope = Manrope({
@@ -47,6 +48,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         >
           {children}
           <CookieBanner />
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>

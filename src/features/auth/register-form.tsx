@@ -11,6 +11,7 @@ import {
   SubmitButton,
   TextField,
 } from "./ui";
+import { notify } from "@/lib/notify";
 
 export function RegisterForm() {
   const register = useSubmit("/api/v1/auth/register");
@@ -27,13 +28,19 @@ export function RegisterForm() {
       email,
       password: String(data.get("password") ?? ""),
     });
-    if (result.ok) setSentTo(email);
+    if (result.ok) {
+      notify.success("Almost there. Check your email.");
+      setSentTo(email);
+    }
   }
 
   async function onResend() {
     if (!sentTo) return;
     const result = await resend.submit({ email: sentTo });
-    if (result.ok) setResent(true);
+    if (result.ok) {
+      notify.success("New link requested.");
+      setResent(true);
+    }
   }
 
   if (sentTo) {

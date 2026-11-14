@@ -11,6 +11,7 @@ import {
   SubmitButton,
   TextField,
 } from "./ui";
+import { notify } from "@/lib/notify";
 
 export function ResetPasswordForm() {
   const token = useSearchParams().get("token");
@@ -29,7 +30,10 @@ export function ResetPasswordForm() {
     }
     setMismatch(undefined);
     const result = await reset.submit({ token, password });
-    if (result.ok) setDone(true);
+    if (result.ok) {
+      notify.success("Password updated.");
+      setDone(true);
+    }
   }
 
   if (done) {
