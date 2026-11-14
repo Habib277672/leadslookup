@@ -43,3 +43,10 @@ export const loginSchema = z
 export const emailOnlySchema = z
   .object({ email })
   .transform((v) => ({ ...v, emailNormalized: normalizeEmail(v.email) }));
+
+export const forgotPasswordSchema = emailOnlySchema;
+
+export const resetPasswordSchema = z.object({
+  token: z.string().min(20).max(200),
+  password: passwordSchema,
+});

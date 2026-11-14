@@ -67,3 +67,58 @@ export function accountExistsEmail(args: { to: string }): EmailMessage {
     html,
   };
 }
+
+/** Always built from the configured site URL, never from request headers. */
+export function buildPasswordResetUrl(token: string): string {
+  return `${siteConfig.url}/reset-password?token=${encodeURIComponent(token)}`;
+}
+
+export function passwordResetEmail(args: {
+  to: string;
+  displayName: string;
+  token: string;
+}): EmailMessage {
+  const url = buildPasswordResetUrl(args.token);
+  const text = [
+    `Hi ${args.displayName},`,
+    "",
+    "We received a request to reset your LeadsLookup password. Use this link to choose a new one:",
+    "",
+    url,
+    "",
+    "This link works once and expires in 30 minutes. If you didn't ask for this, you can ignore this email. Your password has not changed.",
+  ].join("\n");
+  const html = `<p>Hi ${escapeHtml(args.displayName)},</p>
+<p>We received a request to reset your LeadsLookup password.</p>
+<p><a href="${escapeHtml(url)}">Choose a new password</a></p>
+<p>This link works once and expires in 30 minutes. If you didn't ask for this, you can ignore this email. Your password has not changed.</p>`;
+  return {
+    to: args.to,
+    subject: "Reset your LeadsLookup password",
+    text,
+    html,
+  };
+}
+
+export function passwordChangedEmail(args: {
+  to: string;
+  displayName: string;
+}): EmailMessage {
+  const resetUrl = `${siteConfig.url}/forgot-password`;
+  const text = [
+    `Hi ${args.displayName},`,
+    "",
+    "Your LeadsLookup password was just changed, and you were signed out on all devices.",
+    "",
+    `If this wasn't you, reset your password right away: ${resetUrl}`,
+  ].join("\n");
+  const html = `<p>Hi ${escapeHtml(args.displayName)},</p>
+<p>Your LeadsLookup password was just changed, and you were signed out on all devices.</p>
+<p>If this wasn't you, <a href="${escapeHtml(resetUrl)}">reset your password right away</a>.</p>`;
+  return {
+    to: args.to,
+    subject: "Your LeadsLookup password was changed",
+    text,
+    html,
+  };
+}
