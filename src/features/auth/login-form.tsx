@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useRef, useState } from "react";
+import { useRef, useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
+import { notify } from "@/lib/notify";
 import { useSubmit } from "./use-submit";
 import {
   FormAlert,
@@ -12,7 +13,6 @@ import {
   SubmitButton,
   TextField,
 } from "./ui";
-import { notify } from "@/lib/notify";
 
 export function LoginForm() {
   const router = useRouter();
@@ -20,6 +20,8 @@ export function LoginForm() {
   const login = useSubmit("/api/v1/auth/login");
   const resend = useSubmit("/api/v1/auth/email/verification/resend");
   const [resent, setResent] = useState(false);
+  const [navigating, startNavigation] = useTransition();
+  const busy = login.pending || navigating;
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -31,7 +33,8 @@ export function LoginForm() {
     });
     if (result.ok) {
       notify.success("Logged in.");
-      router.replace("/dashboard");
+      formRef.current?.reset(); // a revived copy of this page must not keep the password
+      startNavigation(() => router.replace("/dashboard"));
     }
   }
 
@@ -61,7 +64,7 @@ export function LoginForm() {
           type="email"
           autoComplete="email"
           maxLength={254}
-          disabled={login.pending}
+          disabled={busy}
           error={login.fieldError("email")}
         />
         <TextField
@@ -70,7 +73,7 @@ export function LoginForm() {
           type="password"
           autoComplete="current-password"
           maxLength={128}
-          disabled={login.pending}
+          disabled={busy}
           error={login.fieldError("password")}
           labelAction={
             <Link href="/forgot-password" className={`${linkClass} text-sm`}>
@@ -78,7 +81,7 @@ export function LoginForm() {
             </Link>
           }
         />
-        <SubmitButton pending={login.pending} pendingLabel="Logging in…">
+        <SubmitButton pending={busy} pendingLabel="Logging in…">
           Log in
         </SubmitButton>
       </form>

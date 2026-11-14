@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import { notify } from "@/lib/notify";
 import { postJson } from "./client";
@@ -9,17 +9,19 @@ import { postJson } from "./client";
 export function LogoutButtons() {
   const router = useRouter();
   const [pending, setPending] = useState(false);
+  const [navigating, startNavigation] = useTransition();
+  const busy = pending || navigating;
 
   async function signOut(path: string, message: string) {
     setPending(true);
     const result = await postJson(path);
+    setPending(false);
     if (!result.ok) {
       notify.error(result.message);
-      setPending(false);
       return;
     }
     notify.success(message);
-    router.replace("/login");
+    startNavigation(() => router.replace("/login"));
   }
 
   return (
@@ -27,7 +29,7 @@ export function LogoutButtons() {
       <Button
         variant="outline"
         size="lg"
-        disabled={pending}
+        disabled={busy}
         onClick={() => signOut("/api/v1/auth/logout", "Logged out.")}
       >
         Log out
@@ -35,7 +37,7 @@ export function LogoutButtons() {
       <Button
         variant="ghost"
         size="lg"
-        disabled={pending}
+        disabled={busy}
         onClick={() =>
           signOut("/api/v1/auth/logout-all", "Logged out of all devices.")
         }

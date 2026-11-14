@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { useSubmit } from "./use-submit";
 import {
   FormAlert,
@@ -63,6 +63,7 @@ export function VerifyEmailForm() {
   const router = useRouter();
   const token = useSearchParams().get("token");
   const confirm = useSubmit("/api/v1/auth/email/verification/confirm");
+  const [navigating, startNavigation] = useTransition();
 
   async function onConfirm(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -70,7 +71,7 @@ export function VerifyEmailForm() {
     const result = await confirm.submit({ token });
     if (result.ok) {
       notify.success("Email confirmed. You're logged in.");
-      router.replace("/dashboard");
+      startNavigation(() => router.replace("/dashboard"));
     }
   }
 
@@ -89,7 +90,10 @@ export function VerifyEmailForm() {
   return (
     <form onSubmit={onConfirm} className="space-y-5">
       <FormAlert message={confirm.error?.message} />
-      <SubmitButton pending={confirm.pending} pendingLabel="Confirming…">
+      <SubmitButton
+        pending={confirm.pending || navigating}
+        pendingLabel="Confirming…"
+      >
         Confirm email address
       </SubmitButton>
       <p className="text-sm text-muted-foreground">
