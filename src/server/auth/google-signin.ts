@@ -54,6 +54,22 @@ export async function resolveGoogleUser(
         select: { id: true, status: true },
       });
       if (existing && existing.status !== "pending_verification") {
+        // A concurrent first sign-in may have just created this very account
+        // for this same Google identity. That one is ours, not a conflict.
+        const mine = await tx.userIdentity.findUnique({
+          where: {
+            provider_providerUserId: {
+              provider: "google",
+              providerUserId: profile.sub,
+            },
+          },
+          select: { userId: true },
+        });
+        if (mine?.userId === existing.id) {
+          return existing.status === "active"
+            ? { ok: true, userId: existing.id, created: false }
+            : { ok: false, reason: "suspended" };
+        }
         return { ok: false, reason: "email_in_use" };
       }
       if (existing) await tx.user.delete({ where: { id: existing.id } });
