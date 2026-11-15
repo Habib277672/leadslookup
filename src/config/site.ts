@@ -6,7 +6,8 @@ export const siteConfig = {
   description:
     "Find businesses by category and location, save the promising ones, and keep your outreach organized.",
   url: envUrl ?? "http://localhost:3000",
-  indexable: Boolean(envUrl),
+  // Search engines are allowed only when explicitly switched on at launch.
+  indexable: process.env.SITE_INDEXABLE === "true",
 } as const;
 
 export const mainNav = [

@@ -1,8 +1,13 @@
 import "server-only";
 import { siteConfig } from "@/config/site";
+import { resolveIssuer } from "./issuer";
+
+let issuer: string | undefined;
 
 export const authConfig = {
-  issuer: siteConfig.url,
+  get issuer(): string {
+    return (issuer ??= resolveIssuer(process.env.AUTH_ISSUER, siteConfig.url));
+  },
   accessAudience: "authenticated",
   refreshAudience: "leadslookup:refresh",
   accessTtlSeconds: 15 * 60,
