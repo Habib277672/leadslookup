@@ -11,9 +11,16 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-export function ThemeToggle() {
+export function ThemeToggle({
+  onSelect,
+}: {
+  onSelect?: (value: string) => void;
+}) {
   const { theme, setTheme } = useTheme();
-
+  const change = (value: string) => {
+    setTheme(value);
+    onSelect?.(value);
+  };
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -25,7 +32,7 @@ export function ThemeToggle() {
       <DropdownMenuContent align="end">
         <DropdownMenuRadioGroup
           value={theme ?? "system"}
-          onValueChange={setTheme}
+          onValueChange={change}
         >
           <DropdownMenuRadioItem value="light">
             <Sun /> Light

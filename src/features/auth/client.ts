@@ -11,13 +11,15 @@ type ErrorBody = {
 };
 
 /** POSTs JSON to our own API. The browser adds the Origin header and sends cookies. */
-export async function postJson<T = unknown>(
+/** Sends JSON to our own API. The browser adds the Origin header and sends cookies. */
+export async function sendJson<T = unknown>(
+  method: "POST" | "PATCH",
   path: string,
   body?: unknown,
 ): Promise<ApiResult<T>> {
   try {
     const response = await fetch(path, {
-      method: "POST",
+      method,
       credentials: "same-origin",
       headers:
         body === undefined ? undefined : { "Content-Type": "application/json" },
@@ -45,3 +47,9 @@ export async function postJson<T = unknown>(
     };
   }
 }
+
+export const postJson = <T = unknown>(path: string, body?: unknown) =>
+  sendJson<T>("POST", path, body);
+
+export const patchJson = <T = unknown>(path: string, body?: unknown) =>
+  sendJson<T>("PATCH", path, body);

@@ -6,11 +6,10 @@ import { Button } from "@/components/ui/button";
 import { notify } from "@/lib/notify";
 import { postJson } from "./client";
 
-export function LogoutButtons() {
+export function useSignOut() {
   const router = useRouter();
   const [pending, setPending] = useState(false);
   const [navigating, startNavigation] = useTransition();
-  const busy = pending || navigating;
 
   async function signOut(path: string, message: string) {
     setPending(true);
@@ -24,6 +23,11 @@ export function LogoutButtons() {
     startNavigation(() => router.replace("/login"));
   }
 
+  return { signOut, busy: pending || navigating };
+}
+
+export function LogoutButtons() {
+  const { signOut, busy } = useSignOut();
   return (
     <div className="flex flex-wrap gap-3">
       <Button

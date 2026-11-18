@@ -51,6 +51,7 @@ type TextFieldProps = {
   disabled?: boolean;
   maxLength?: number;
   labelAction?: React.ReactNode;
+  defaultValue?: string;
 };
 
 export function TextField({
