@@ -20,7 +20,7 @@ async function Sections() {
           </h2>
           <p className="text-sm text-muted-foreground">
             Signed in as <span className="text-foreground">{user.email}</span>.
-            The email address can't be changed here.
+            The email address can{"'"}t be changed here.
           </p>
         </div>
         <ProfileForm displayName={user.displayName} />
