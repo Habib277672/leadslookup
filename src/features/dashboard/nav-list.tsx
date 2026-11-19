@@ -2,10 +2,17 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Bookmark, LayoutDashboard, Search, Settings } from "lucide-react";
+// import { Bookmark, LayoutDashboard, Search, Settings } from "lucide-react";
 import type { ComponentType } from "react";
 import { SheetClose } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
+import {
+  Bookmark,
+  LayoutDashboard,
+  Search,
+  Settings,
+  ShieldCheck,
+} from "lucide-react";
 
 type Item = {
   href: string;
@@ -26,14 +33,9 @@ const items: Item[] = [
     href: "/dashboard/saved-leads",
     label: "Saved leads",
     icon: Bookmark,
-    soon: true,
   },
-  {
-    href: "/dashboard/settings",
-    label: "Settings",
-    icon: Settings,
-    soon: true,
-  },
+  { href: "/dashboard/settings", label: "Settings", icon: Settings },
+  { href: "/dashboard/security", label: "Security", icon: ShieldCheck },
 ];
 
 const base =

@@ -1,7 +1,8 @@
 import { loginSchema } from "@/features/auth/schemas";
 import { setAuthCookies } from "@/server/auth/cookies";
 import { checkCredentials, type LoginResult } from "@/server/auth/login";
-import { createSession } from "@/server/auth/sessions";
+// import { createSession } from "@/server/auth/sessions";
+import { startSession } from "@/server/auth/start-session";
 import { hashToken } from "@/server/auth/tokens";
 import { logError } from "@/server/http/log";
 import { getClientIp, readJsonBody } from "@/server/http/request";
@@ -64,7 +65,7 @@ export async function POST(request: Request) {
     );
     if (!result.ok) return failLogin(result.reason);
 
-    const tokens = await createSession(result.userId, {
+    const tokens = await startSession(result.userId, {
       userAgent: request.headers.get("user-agent"),
       ipAddress: ip === "unknown" ? null : ip,
     });

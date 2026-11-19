@@ -195,3 +195,38 @@ export async function revokeAllUserSessions(userId: string): Promise<void> {
     }),
   ]);
 }
+
+/** Revokes sessions superseded by a new login. Never throws into the login path. */
+export async function retireSessions(options: {
+  userId: string;
+  keepSessionId: string;
+  browserSessionIds: string[];
+  singleSession: boolean;
+}): Promise<void> {
+  const { userId, keepSessionId, browserSessionIds, singleSession } = options;
+  const db = getDb();
+  const now = new Date();
+
+  const targets = await db.authSession.findMany({
+    where: singleSession
+      ? { userId, id: { not: keepSessionId }, revokedAt: null }
+      : {
+          id: { in: browserSessionIds.filter((id) => id !== keepSessionId) },
+          revokedAt: null,
+        },
+    select: { id: true },
+  });
+  if (targets.length === 0) return;
+
+  const ids = targets.map((t) => t.id);
+  await db.$transaction([
+    db.authSession.updateMany({
+      where: { id: { in: ids }, revokedAt: null },
+      data: { revokedAt: now },
+    }),
+    db.authRefreshToken.updateMany({
+      where: { sessionId: { in: ids }, revokedAt: null },
+      data: { revokedAt: now },
+    }),
+  ]);
+}

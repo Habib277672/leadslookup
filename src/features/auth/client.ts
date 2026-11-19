@@ -13,7 +13,7 @@ type ErrorBody = {
 /** POSTs JSON to our own API. The browser adds the Origin header and sends cookies. */
 /** Sends JSON to our own API. The browser adds the Origin header and sends cookies. */
 export async function sendJson<T = unknown>(
-  method: "POST" | "PATCH",
+  method: "POST" | "PATCH" | "DELETE",
   path: string,
   body?: unknown,
 ): Promise<ApiResult<T>> {
@@ -53,3 +53,6 @@ export const postJson = <T = unknown>(path: string, body?: unknown) =>
 
 export const patchJson = <T = unknown>(path: string, body?: unknown) =>
   sendJson<T>("PATCH", path, body);
+
+export const deleteJson = <T = unknown>(path: string) =>
+  sendJson<T>("DELETE", path);

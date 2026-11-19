@@ -8,7 +8,8 @@ import {
 } from "@/server/auth/google";
 import { resolveGoogleUser } from "@/server/auth/google-signin";
 import { takeFlowCookie } from "@/server/auth/oauth-flow";
-import { createSession } from "@/server/auth/sessions";
+// import { createSession } from "@/server/auth/sessions";
+import { startSession } from "@/server/auth/start-session";
 import { safeEqualString } from "@/server/auth/tokens";
 import { logError } from "@/server/http/log";
 import { getClientIp } from "@/server/http/request";
@@ -75,7 +76,7 @@ export async function GET(request: Request) {
       );
     }
 
-    const tokens = await createSession(result.userId, {
+    const tokens = await startSession(result.userId, {
       userAgent: request.headers.get("user-agent"),
       ipAddress: ip === "unknown" ? null : ip,
     });

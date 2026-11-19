@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { buttonVariants } from "@/components/ui/button";
+import { Suspense } from "react";
+import { HeaderAuth } from "@/components/layout/header-auth";
+import { HeaderAuthLoader } from "@/components/layout/header-auth-loader";
 import { MainNav } from "@/components/layout/main-nav";
-import { MobileNav } from "@/components/layout/mobile-nav";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { siteConfig } from "@/config/site";
 
@@ -18,18 +19,9 @@ export function SiteHeader() {
         <MainNav />
         <div className="ml-auto flex items-center gap-2">
           <ThemeToggle />
-          <div className="hidden items-center gap-2 lg:flex">
-            <Link
-              href="/login"
-              className={buttonVariants({ variant: "ghost", size: "lg" })}
-            >
-              Log in
-            </Link>
-            <Link href="/register" className={buttonVariants({ size: "lg" })}>
-              Get started
-            </Link>
-          </div>
-          <MobileNav />
+          <Suspense fallback={<HeaderAuth signedIn={false} />}>
+            <HeaderAuthLoader />
+          </Suspense>
         </div>
       </div>
     </header>

@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/sheet";
 import { mainNav, siteConfig } from "@/config/site";
 
-export function MobileNav() {
+export function MobileNav({ signedIn }: { signedIn: boolean }) {
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -51,29 +51,45 @@ export function MobileNav() {
           </ul>
         </nav>
         <div className="mt-auto flex flex-col gap-2 border-t border-border p-4">
-          <SheetClose asChild>
-            <Link
-              href="/login"
-              className={buttonVariants({
-                variant: "outline",
-                size: "lg",
-                className: "h-11 w-full",
-              })}
-            >
-              Log in
-            </Link>
-          </SheetClose>
-          <SheetClose asChild>
-            <Link
-              href="/register"
-              className={buttonVariants({
-                size: "lg",
-                className: "h-11 w-full",
-              })}
-            >
-              Get started
-            </Link>
-          </SheetClose>
+          {signedIn ? (
+            <SheetClose asChild>
+              <Link
+                href="/dashboard"
+                className={buttonVariants({
+                  size: "lg",
+                  className: "h-11 w-full",
+                })}
+              >
+                Dashboard
+              </Link>
+            </SheetClose>
+          ) : (
+            <>
+              <SheetClose asChild>
+                <Link
+                  href="/login"
+                  className={buttonVariants({
+                    variant: "outline",
+                    size: "lg",
+                    className: "h-11 w-full",
+                  })}
+                >
+                  Log in
+                </Link>
+              </SheetClose>
+              <SheetClose asChild>
+                <Link
+                  href="/register"
+                  className={buttonVariants({
+                    size: "lg",
+                    className: "h-11 w-full",
+                  })}
+                >
+                  Get started
+                </Link>
+              </SheetClose>
+            </>
+          )}
         </div>
       </SheetContent>
     </Sheet>
